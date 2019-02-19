@@ -3,7 +3,9 @@ const request = require('request-promise-native');
 
 (async () => {
   // data sources
-  const response = await request.get("https://service-catalogue-platform.prod.ctmers.io/services/metadata")
+  const response = await request.get(
+    'https://service-catalogue-platform.prod.ctmers.io/services/metadata',
+  );
 
   /* 1 - Graphql schema
   Defines a simple Query type with 3 fields called "info", "feed" and "link".
@@ -12,11 +14,11 @@ const request = require('request-promise-native');
   */
 
   // fetch link by Id
-  const typeDefs =`
+  const typeDefs = `
   type Query {
     name: String!
   }
-  `
+  `;
 
   /*
     2 - Resolvers
@@ -28,7 +30,7 @@ const request = require('request-promise-native');
     Query: {
       name: () => `This is the API of a Hacker News Clone`,
     },
-  }
+  };
 
   /*
     3 - Pass on schema and resolvers to graphql server
@@ -39,12 +41,9 @@ const request = require('request-promise-native');
   const server = new GraphQLServer({
     typeDefs,
     resolvers,
-  })
+  });
 
-  server.start(() => {console.log(`Server is running on http://localhost:4000`)})
+  server.start(() => {
+    console.log(`Server is running on http://localhost:4000`);
+  });
 })();
-
-
-
-
-

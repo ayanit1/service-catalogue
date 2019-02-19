@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "start": "nodemon src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "style": "eslint '**/*.js'",
+    "style-fix": "eslint --fix '**/*.js'"
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,7 @@
     "request-promise-native": "^1.0.7"
   },
   "devDependencies": {
+    "@ctm/eslint-config-rewards": "^2.1.0",
     "nodemon": "^1.18.10"
   }
 }
