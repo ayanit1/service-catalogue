@@ -11,7 +11,8 @@ const request = require('request-promise-native');
 
   const typeDefs = `
   type Query {
-    service: [Service!]!
+    services: [Service!]!
+    service(name: String!): Service
   }
 
   type Service {
@@ -23,7 +24,9 @@ const request = require('request-promise-native');
 
   const resolvers = {
     Query: {
-      service: () => response,
+      services: () => response,
+      service: (_, args) =>
+        response.find(service => service.name === args.name),
     },
     Service: {
       name: parent => parent.name,
