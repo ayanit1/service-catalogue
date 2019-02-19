@@ -5,8 +5,10 @@ const request = require('request-promise-native');
   // data sources
   const response = await request.get(
     'https://service-catalogue-platform.prod.ctmers.io/services/metadata',
+    {
+      json: true,
+    },
   );
-
   /* 1 - Graphql schema
   Defines a simple Query type with 3 fields called "info", "feed" and "link".
   Info has The field has a type String!. The exclamation mark in the type definition
@@ -16,6 +18,10 @@ const request = require('request-promise-native');
   // fetch link by Id
   const typeDefs = `
   type Query {
+    service: [Service!]!
+  }
+
+  type Service {
     name: String!
   }
   `;
@@ -28,7 +34,10 @@ const request = require('request-promise-native');
   */
   const resolvers = {
     Query: {
-      name: () => `This is the API of a Hacker News Clone`,
+      service: () => response,
+    },
+    Service: {
+      name: parent => parent.name,
     },
   };
 
