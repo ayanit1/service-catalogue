@@ -23,6 +23,8 @@ const request = require('request-promise-native');
 
   type Service {
     name: String!
+    owner: String
+    repo: String
   }
   `;
 
@@ -38,6 +40,8 @@ const request = require('request-promise-native');
     },
     Service: {
       name: parent => parent.name,
+      owner: parent => parent.owner,
+      repo: parent => parent.repo,
     },
   };
 
