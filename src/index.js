@@ -1,15 +1,17 @@
 const { GraphQLServer } = require('graphql-yoga');
-const request = require('request-promise-native');
+const getServiceCatalogue = require('./dataSources/serviceCatalogue.js');
+
+let serviceCatalogueResponse;
 
 (async () => {
-  const response = await request.get(
-    'https://service-catalogue-platform.prod.ctmers.io/services/metadata',
-    {
-      json: true,
-    },
-  );
+  try {
+    serviceCatalogueResponse = await getServiceCatalogue();
+  } catch (err) {
+    console.log(err);
+  }
+})();
 
-  const typeDefs = `
+const typeDefs = `
   type Query {
     services: [Service!]!
     service(name: String!): Service
@@ -22,25 +24,24 @@ const request = require('request-promise-native');
   }
   `;
 
-  const resolvers = {
-    Query: {
-      services: () => response,
-      service: (_, args) =>
-        response.find(service => service.name === args.name),
-    },
-    Service: {
-      name: parent => parent.name,
-      owner: parent => parent.owner,
-      repo: parent => parent.repo,
-    },
-  };
+const resolvers = {
+  Query: {
+    services: () => serviceCatalogueResponse,
+    service: (_, args) =>
+      serviceCatalogueResponse.find(service => service.name === args.name),
+  },
+  Service: {
+    name: parent => parent.name,
+    owner: parent => parent.owner,
+    repo: parent => parent.repo,
+  },
+};
 
-  const server = new GraphQLServer({
-    typeDefs,
-    resolvers,
-  });
+const server = new GraphQLServer({
+  typeDefs,
+  resolvers,
+});
 
-  server.start(() => {
-    console.log(`Server is running on http://localhost:4000`);
-  });
-})();
+server.start(() => {
+  console.log(`Server is running on http://localhost:4000`);
+});
