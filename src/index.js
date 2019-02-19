@@ -1,11 +1,13 @@
 const { GraphQLServer } = require('graphql-yoga');
 const getServiceCatalogue = require('./dataSources/serviceCatalogue.js');
+const getKubernetesData = require('./dataSources/kubernetes');
 
 let serviceCatalogueResponse;
 
 (async () => {
   try {
     serviceCatalogueResponse = await getServiceCatalogue();
+    kubernetesResponse = await getKubernetesData();
   } catch (err) {
     console.log(err);
   }
