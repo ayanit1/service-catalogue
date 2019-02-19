@@ -1,0 +1,28 @@
+{
+  "name": "service-catalogue",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayanit1/service-catalogue.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ayanit1/service-catalogue/issues"
+  },
+  "homepage": "https://github.com/ayanit1/service-catalogue#readme",
+  "dependencies": {
+    "graphql-yoga": "^1.17.4",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
+}
