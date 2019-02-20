@@ -1,0 +1,10 @@
+type Query {
+  services: [Service!]!
+  service(name: String!): Service
+}
+
+type Service {
+  name: String!
+  owner: String
+  repo: String
+}

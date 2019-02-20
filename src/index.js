@@ -1,8 +1,10 @@
 const { GraphQLServer } = require('graphql-yoga');
+
 const getServiceCatalogue = require('./dataSources/serviceCatalogue.js');
 const getKubernetesData = require('./dataSources/kubernetes');
 
 let serviceCatalogueResponse;
+let kubernetesResponse;
 
 (async () => {
   try {
@@ -12,19 +14,6 @@ let serviceCatalogueResponse;
     console.log(err);
   }
 })();
-
-const typeDefs = `
-  type Query {
-    services: [Service!]!
-    service(name: String!): Service
-  }
-
-  type Service {
-    name: String!
-    owner: String
-    repo: String
-  }
-  `;
 
 const resolvers = {
   Query: {
@@ -40,7 +29,7 @@ const resolvers = {
 };
 
 const server = new GraphQLServer({
-  typeDefs,
+  typeDefs: './src/types/index.graphql',
   resolvers,
 });
 
