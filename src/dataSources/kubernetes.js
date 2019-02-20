@@ -1,9 +1,38 @@
-const { Client, config } = require('kubernetes-client');
+const k8s = require('@kubernetes/client-node');
+const request = require('request');
 
-const client = new Client({ config: config.fromKubeconfig(), version: '1.9' });
+const kc = new k8s.KubeConfig();
+kc.loadFromDefault();
+
+const k8sApi = kc.makeApiClient(k8s.Core_v1Api);
 
 module.exports = async () => {
-  const response = await client.api.v1.pods.get();
+  const res = await k8sApi.listNamespace();
+  const namespaces = res.body.items;
 
-  return response.body.items[0];
+  // console.log(namespaces);
+
+  namespaces.forEach(namespace =>
+    request.get(
+      `${
+        kc.getCurrentCluster().server
+      }/apis/extensions/v1beta1/namespaces/${namespace}/deployments`,
+      {},
+      (error, response, body) => {
+        if (error) {
+          console.log(`error: ${error}`);
+        }
+        const deploymentList = JSON.parse(body).items;
+        console.log(deploymentList);
+
+        const deployments = deploymentList.map(d => d.metadata.name);
+        const list = { team_namespace: namespace, team_services: deployments };
+        console.log(list);
+        return list;
+      },
+    ),
+  );
 };
+
+// working info
+// await client.api.v1.namespaces.get();

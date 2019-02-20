@@ -25,6 +25,15 @@ const resolvers = {
     name: parent => parent.name,
     owner: parent => parent.owner,
     repo: parent => parent.repo,
+    envVars: parent => {
+      const serviceName = parent.name;
+
+      // console.log(kubernetesResponse);
+
+      // kubernetesResponse.forEach(service => console.log(service.metadata.name));
+
+      return kubernetesResponse.find(service => service.name === serviceName);
+    },
   },
 };
 

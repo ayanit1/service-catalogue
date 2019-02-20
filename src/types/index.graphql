@@ -7,4 +7,10 @@ type Service {
   name: String!
   owner: String
   repo: String
+  envVars: [envVar]
+}
+
+type envVar {
+  name: String
+  value: String
 }

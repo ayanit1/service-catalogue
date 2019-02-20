@@ -20,8 +20,8 @@
   },
   "homepage": "https://github.com/ayanit1/service-catalogue#readme",
   "dependencies": {
+    "@kubernetes/client-node": "^0.8.1",
     "graphql-yoga": "^1.17.4",
-    "kubernetes-client": "^6.8.3",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7"
   },
