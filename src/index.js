@@ -26,8 +26,26 @@ const resolvers = {
     owner: parent => parent.owner,
     repo: parent => parent.repo,
     envVars: parent => {
-      const serviceName = parent.name;
-      return kubernetesResponse.find(service => service.name === serviceName);
+      const serviceName = parent.name.replace('.', '-');
+      const response = kubernetesResponse.find(
+        service => service.metadata.name === serviceName,
+      );
+      const envVariables = response.spec.template.spec.containers[0].env;
+
+      const array = [];
+      envVariables.forEach(variable => {
+        if (variable.valueFrom) {
+          array.push({
+            name: variable.name,
+            value: 'REDACTED',
+          });
+          return;
+        }
+
+        array.push(variable);
+      });
+
+      return array;
     },
   },
 };
