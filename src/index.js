@@ -6,14 +6,14 @@ const getKubernetesData = require('./dataSources/kubernetes');
 let serviceCatalogueResponse;
 let kubernetesResponse;
 
-(async () => {
+const getData = async () => {
   try {
     serviceCatalogueResponse = await getServiceCatalogue();
     kubernetesResponse = await getKubernetesData();
   } catch (err) {
     console.log(err);
   }
-})();
+};
 
 const resolvers = {
   Query: {
@@ -27,11 +27,6 @@ const resolvers = {
     repo: parent => parent.repo,
     envVars: parent => {
       const serviceName = parent.name;
-
-      // console.log(kubernetesResponse);
-
-      // kubernetesResponse.forEach(service => console.log(service.metadata.name));
-
       return kubernetesResponse.find(service => service.name === serviceName);
     },
   },
@@ -42,6 +37,8 @@ const server = new GraphQLServer({
   resolvers,
 });
 
-server.start(() => {
-  console.log(`Server is running on http://localhost:4000`);
+getData().then(() => {
+  server.start(() => {
+    console.log(`Server is running on http://localhost:4000`);
+  });
 });
