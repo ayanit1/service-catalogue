@@ -24,15 +24,23 @@ module.exports = {
       return variable;
     });
   },
-  podResolver: (name, data) => {
-    const response = findNameInData(name, data);
+  podInfoResolver: (name, data) => {
+    const { podInfo } = findNameInData(name, data);
 
-    return lodash.get(response, 'response.pods');
+    return podInfo;
   },
 
   isOnPaasResolver: (name, data) => {
     const response = findNameInData(name, data);
 
     return response !== undefined;
+  },
+  serviceUrlResolver: (name, data) => {
+    const serviceName = name.replace('.', '-');
+    const response = data.filter(
+      service => service.http.paths[0].backend.serviceName === serviceName,
+    );
+
+    return response.map(element => element.host);
   },
 };

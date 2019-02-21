@@ -5,10 +5,10 @@ const { getDeployments, getIngressInfo } = require('./dataSources/kubernetes');
 
 const {
   envVariableResolver,
-  podResolver,
+  podInfoResolver,
   isOnPaasResolver,
+  serviceUrlResolver,
 } = require('./resolvers/paasInfo.js');
-const serviceHostResolver = require('./resolvers/serviceHost');
 
 let serviceCatalogueResponse;
 let deployments;
@@ -34,10 +34,10 @@ const resolvers = {
     name: parent => parent.name,
     owner: parent => parent.owner,
     repo: parent => parent.repo,
-    pods: parent => podResolver(parent.name, deployments),
+    podInfo: parent => podInfoResolver(parent.name, deployments),
     isOnPaas: parent => isOnPaasResolver(parent.name, deployments),
     envVars: parent => envVariableResolver(parent.name, deployments),
-    urls: parent => serviceHostResolver(parent.name, ingressInfo),
+    urls: parent => serviceUrlResolver(parent.name, ingressInfo),
   },
 };
 
