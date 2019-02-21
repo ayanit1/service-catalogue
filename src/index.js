@@ -29,6 +29,10 @@ const resolvers = {
     services: () => serviceCatalogueResponse,
     service: (_, args) =>
       serviceCatalogueResponse.find(service => service.name === args.name),
+    domain: (_, args) =>
+      serviceCatalogueResponse.filter(service =>
+        service.name.includes(args.name),
+      ),
   },
   Service: {
     name: parent => parent.name,

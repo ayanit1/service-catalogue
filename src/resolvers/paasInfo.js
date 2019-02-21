@@ -25,9 +25,9 @@ module.exports = {
     });
   },
   podInfoResolver: (name, data) => {
-    const { podInfo } = findNameInData(name, data);
+    const response = findNameInData(name, data);
 
-    return podInfo;
+    return lodash.get(response, 'podInfo');
   },
 
   isOnPaasResolver: (name, data) => {

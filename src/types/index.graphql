@@ -1,6 +1,7 @@
 type Query {
   services: [Service!]!
   service(name: String!): Service
+  domain(name: String!): [Service!]!
 }
 
 type Service {
