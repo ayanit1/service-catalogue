@@ -1,5 +1,6 @@
 const k8s = require('@kubernetes/client-node');
 const request = require('request-promise-native');
+const lodash = require('lodash');
 
 const kc = new k8s.KubeConfig();
 const opts = {};
@@ -22,8 +23,12 @@ module.exports = {
       opts,
     );
 
-    const parsedResponse = JSON.parse(response);
+    const parsedResponse = JSON.parse(response).items;
 
-    return parsedResponse.items;
+    const sanitisedResponse = parsedResponse.map(service =>
+      lodash.get(service, 'spec.rules'),
+    );
+
+    return lodash.flatten(sanitisedResponse);
   },
 };
