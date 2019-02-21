@@ -19,9 +19,10 @@ module.exports = {
 
     return parsedResponse.map(service => {
       const name = lodash.get(service, 'metadata.name');
+      const pods = lodash.get(service, 'spec.replicas');
       const envs = lodash.get(service, 'spec.template.spec.containers[0].env');
 
-      return { name, envs };
+      return { name, pods, envs };
     });
   },
   getIngressInfo: async () => {

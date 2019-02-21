@@ -3,7 +3,11 @@ const { GraphQLServer } = require('graphql-yoga');
 const getServiceCatalogue = require('./dataSources/serviceCatalogue.js');
 const { getDeployments, getIngressInfo } = require('./dataSources/kubernetes');
 
-const envVariableResolver = require('./resolvers/envVariables.js');
+const {
+  envVariableResolver,
+  podResolver,
+  isOnPaasResolver,
+} = require('./resolvers/paasInfo.js');
 const serviceHostResolver = require('./resolvers/serviceHost');
 
 let serviceCatalogueResponse;
@@ -30,6 +34,8 @@ const resolvers = {
     name: parent => parent.name,
     owner: parent => parent.owner,
     repo: parent => parent.repo,
+    pods: parent => podResolver(parent.name, deployments),
+    isOnPaas: parent => isOnPaasResolver(parent.name, deployments),
     envVars: parent => envVariableResolver(parent.name, deployments),
     urls: parent => serviceHostResolver(parent.name, ingressInfo),
   },

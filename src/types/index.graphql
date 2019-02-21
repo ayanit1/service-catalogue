@@ -7,6 +7,8 @@ type Service {
   name: String!
   owner: String
   repo: String
+  pods: Int
+  isOnPaas: Boolean
   envVars: [envVar]
   urls: [String]
 }
