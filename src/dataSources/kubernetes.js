@@ -15,7 +15,14 @@ module.exports = {
       opts,
     );
 
-    return JSON.parse(response).items;
+    const parsedResponse = JSON.parse(response).items;
+
+    return parsedResponse.map(service => {
+      const name = lodash.get(service, 'metadata.name');
+      const envs = lodash.get(service, 'spec.template.spec.containers[0].env');
+
+      return { name, envs };
+    });
   },
   getIngressInfo: async () => {
     const response = await request.get(

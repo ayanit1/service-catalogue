@@ -1,21 +1,21 @@
+const lodash = require('lodash');
+
 module.exports = (name, data) => {
   const serviceName = name.replace('.', '-');
-  const response = data.find(service => service.metadata.name === serviceName);
+  const response = data.find(service => service.name === serviceName);
 
-  const envVariables = response.spec.template.spec.containers[0].env;
+  if (lodash.get(response, 'envs') === undefined) {
+    return undefined;
+  }
 
-  const array = [];
-  envVariables.forEach(variable => {
+  return response.envs.map(variable => {
     if (variable.valueFrom) {
-      array.push({
+      return {
         name: variable.name,
         value: 'REDACTED',
-      });
-      return;
+      };
     }
 
-    array.push(variable);
+    return variable;
   });
-
-  return array;
 };
