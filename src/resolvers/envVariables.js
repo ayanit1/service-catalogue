@@ -1,6 +1,7 @@
 module.exports = (name, data) => {
   const serviceName = name.replace('.', '-');
   const response = data.find(service => service.metadata.name === serviceName);
+
   const envVariables = response.spec.template.spec.containers[0].env;
 
   const array = [];

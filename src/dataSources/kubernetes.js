@@ -7,11 +7,23 @@ const opts = {};
 kc.loadFromDefault();
 kc.applyToRequest(opts);
 
-module.exports = async () => {
-  const response = await request.get(
-    `${kc.getCurrentCluster().server}/apis/extensions/v1beta1/deployments`,
-    opts,
-  );
+module.exports = {
+  getDeployments: async () => {
+    const response = await request.get(
+      `${kc.getCurrentCluster().server}/apis/extensions/v1beta1/deployments`,
+      opts,
+    );
 
-  return JSON.parse(response).items;
+    return JSON.parse(response).items;
+  },
+  getIngressInfo: async () => {
+    const response = await request.get(
+      `${kc.getCurrentCluster().server}/apis/extensions/v1beta1/ingresses`,
+      opts,
+    );
+
+    const parsedResponse = JSON.parse(response);
+
+    return parsedResponse.items;
+  },
 };

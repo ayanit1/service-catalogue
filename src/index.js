@@ -1,17 +1,20 @@
 const { GraphQLServer } = require('graphql-yoga');
 
 const getServiceCatalogue = require('./dataSources/serviceCatalogue.js');
-const getKubernetesData = require('./dataSources/kubernetes');
+const { getDeployments, getIngressInfo } = require('./dataSources/kubernetes');
 
 const envVariableResolver = require('./resolvers/envVariables.js');
+const serviceHostResolver = require('./resolvers/serviceHost');
 
 let serviceCatalogueResponse;
-let kubernetesResponse;
+let deployments;
+let ingressInfo;
 
 const getData = async () => {
   try {
     serviceCatalogueResponse = await getServiceCatalogue();
-    kubernetesResponse = await getKubernetesData();
+    deployments = await getDeployments();
+    ingressInfo = await getIngressInfo();
   } catch (err) {
     console.log(err);
   }
@@ -27,7 +30,8 @@ const resolvers = {
     name: parent => parent.name,
     owner: parent => parent.owner,
     repo: parent => parent.repo,
-    envVars: parent => envVariableResolver(parent.name, kubernetesResponse),
+    envVars: parent => envVariableResolver(parent.name, deployments),
+    urls: parent => serviceHostResolver(parent.name, ingressInfo),
   },
 };
 

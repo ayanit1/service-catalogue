@@ -8,6 +8,7 @@ type Service {
   owner: String
   repo: String
   envVars: [envVar]
+  urls: [String]
 }
 
 type envVar {
