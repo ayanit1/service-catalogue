@@ -8,6 +8,7 @@ const {
   podInfoResolver,
   isOnPaasResolver,
   serviceUrlResolver,
+  lastDeploymentResolver,
 } = require('./resolvers/paasInfo.js');
 
 let serviceCatalogueResponse;
@@ -41,6 +42,7 @@ const resolvers = {
     podInfo: parent => podInfoResolver(parent.name, deployments),
     isOnPaas: parent => isOnPaasResolver(parent.name, deployments),
     envVars: parent => envVariableResolver(parent.name, deployments),
+    lastDeployment: parent => lastDeploymentResolver(parent.name, deployments),
     urls: parent => serviceUrlResolver(parent.name, ingressInfo),
   },
 };

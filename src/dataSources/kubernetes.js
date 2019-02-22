@@ -25,8 +25,9 @@ module.exports = {
         'spec.template.spec.containers[0].resources.limits',
       );
       const envs = lodash.get(service, 'spec.template.spec.containers[0].env');
+      const lastDeployment = lodash.get(service, 'metadata.creationTimestamp');
 
-      return { name, podInfo: { pods, resourceLimit }, envs };
+      return { name, lastDeployment, podInfo: { pods, resourceLimit }, envs };
     });
   },
   getIngressInfo: async () => {

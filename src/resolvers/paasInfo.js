@@ -43,4 +43,9 @@ module.exports = {
 
     return response.map(element => element.host);
   },
+  lastDeploymentResolver: (name, data) => {
+    const response = findNameInData(name, data);
+
+    return lodash.get(response, 'lastDeployment');
+  },
 };
