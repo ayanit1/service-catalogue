@@ -1,4 +1,5 @@
 const { GraphQLServer } = require('graphql-yoga');
+const lodash = require('lodash');
 
 const getServiceCatalogue = require('./dataSources/serviceCatalogue.js');
 const { getDeployments, getIngressInfo } = require('./dataSources/kubernetes');
@@ -42,6 +43,24 @@ const resolvers = {
     isOnPaas: parent => isOnPaasResolver(parent.name, deployments),
     envVars: parent => envVariableResolver(parent.name, deployments),
     urls: parent => serviceUrlResolver(parent.name, ingressInfo),
+    dependencies: parent => {
+      // todo: refactor
+      let critical;
+      let nonCritical;
+      if (lodash.get(parent.dependencies, 'critical') === undefined) {
+        critical = [];
+      } else {
+        critical = lodash.get(parent.dependencies, 'critical');
+      }
+
+      if (lodash.get(parent.dependencies, 'non-critical') === undefined) {
+        nonCritical = [];
+      } else {
+        nonCritical = lodash.get(parent.dependencies, 'non-critical');
+      }
+
+      return critical.concat(nonCritical);
+    },
   },
 };
 
