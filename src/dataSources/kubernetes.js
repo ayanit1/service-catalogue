@@ -11,7 +11,7 @@ kc.applyToRequest(opts);
 module.exports = {
   getDeployments: async () => {
     const response = await request.get(
-      `${kc.getCurrentCluster().server}/apis/extensions/v1beta1/deployments`,
+      `${kc.getCurrentCluster().server}/apis/apps/v1/deployments`,
       opts,
     );
 
